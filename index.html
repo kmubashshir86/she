@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Cosmic Love Story</title>
+    <style>
+        /* Basic Setup */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000; /* Super AMOLED black */
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle, #0d1b2a, #000) no-repeat;
+            z-index: 1;
+        }
+
+        .container {
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 3em;
+            color: #1e90ff;
+            text-shadow: 0 0 10px #1e90ff, 0 0 20px #1e90ff;
+        }
+
+        .countdown {
+            font-size: 2em;
+            margin-top: 20px;
+            color: #ff4b5c;
+            text-shadow: 0 0 5px #ff4b5c, 0 0 10px #ff4b5c;
+        }
+
+        .orbiting-stars {
+            position: relative;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .binary-star {
+            width: 100px;
+            height: 100px;
+            background-color: #1e90ff;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #fff;
+            box-shadow: 0 0 20px 8px #1e90ff, 0 0 50px 15px #1e90ff;
+        }
+
+        #star1 {
+            animation: orbit 8s linear infinite;
+        }
+
+        #star2 {
+            animation: orbit 8s linear infinite reverse;
+        }
+
+        @keyframes orbit {
+            0% {
+                transform: rotate(0deg) translateX(150px) rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg) translateX(150px) rotate(-360deg);
+            }
+        }
+
+        .proposal {
+            margin-top: 40px;
+            font-size: 1.5em;
+            color: #1e90ff;
+            text-shadow: 0 0 5px #1e90ff, 0 0 10px #1e90ff;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #1e90ff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 10px 5px #1e90ff;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px 10px #1e90ff;
+        }
+
+        #surprise {
+            margin-top: 30px;
+            font-size: 2em;
+            color: #ff4b5c;
+            text-shadow: 0 0 10px #ff4b5c, 0 0 20px #ff4b5c;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(white, transparent);
+            opacity: 0;
+            animation: shoot 5s linear infinite;
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 1;
+                transform: translate(-200px, -200px);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(800px, 800px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="my.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="starfield">
+        <canvas id="canvas"></canvas>
+    </div>
+    <div class="container">
+        <h1>Our Cosmic Love Story</h1>
+        <div class="countdown" id="countdown">3... 2... 1...</div>
+        <div class="orbiting-stars">
+            <div class="binary-star" id="star1">Mubashshir</div>
+            <div class="binary-star" id="star2">She</div>
+        </div>
+        <div class="proposal hidden" id="proposal">
+            <p>Like two stars that orbit each other, my life orbits around you.</p>
+            <p>Will you be the star that lights up my universe forever?</p>
+            <button onclick="showSurprise()">Yes or Yes?</button>
+        </div>
+        <div id="surprise" class="hidden">
+            <h2>She Said Yes! 💍</h2>
+            <p>Here's to our forever, my love.</p>
+        </div>
+    </div>
+
+    <script>
+        // Countdown Timer
+        let countdownElement = document.getElementById('countdown');
+        let proposalElement = document.getElementById('proposal');
+        let countdown = 3;
+
+        let countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                countdownElement.textContent = `${countdown}...`;
+            } else {
+                countdownElement.textContent = '';
+                proposalElement.classList.remove('hidden');
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+
+        // Starfield Effect
+        function createStars() {
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            function drawStars() {
+                const starCount = 300;
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < starCount; i++) {
+                    const x = Math.random() * width;
+                    const y = Math.random() * height;
+                    const radius = Math.random() * 2;
+                    ctx.beginPath();
+                    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                    ctx.fill();
+                }
+            }
+
+            drawStars();
+        }
+
+        window.onload = createStars;
+        window.onresize = createStars;
+
+        // Shooting Stars Effect
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            shootingStar.style.top = `${Math.random() * window.innerHeight}px`;
+            shootingStar.style.left = `${Math.random() * window.innerWidth}px`;
+            document.body.appendChild(shootingStar);
+
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 5000);
+        }
+
+        setInterval(createShootingStar, 3000); // Shooting star every 3 seconds
+
+        // Music Fade-In
+        let backgroundMusic = document.getElementById('backgroundMusic');
+        backgroundMusic.volume = 0;
+        let fadeAudio = setInterval(() => {
+            if (backgroundMusic.volume < 1) {
+                backgroundMusic.volume += 0.05;
+            } else {
+                clearInterval(fadeAudio);
+            }
+        }, 200);
+
+        // Show Surprise Function
+        function showSurprise() {
+            document.getElementById('surprise').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
